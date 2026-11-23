@@ -48,7 +48,7 @@
     return l
       .replace(/^\[[^\]]{4,40}\]\s*[^:]{1,40}:\s*/, '')            // [23/11/2026, 7:11 PM] Sender:
       .replace(/^\d{1,2}\/\d{1,2}\/\d{2,4},?\s+\d{1,2}:\d{2}(\s?[AP]M)?\s+-\s+[^:]{1,40}:\s*/i, '') // 23/11/26, 19:11 - Sender:
-      .replace(/[‎‏‪-‮]/g, '')
+      .replace(/[​-‏‪-‮⁦-⁩﻿]/g, '').replace(/ /g, ' ')
       .trim();
   }
 
@@ -102,7 +102,7 @@
 
     // remaining loose lines (minus greeting/client/phones) become notes
     loose.forEach(l => {
-      if (l === res.client || GREETING.test(l) || MAP_LINK.test(l)) { MAP_LINK.lastIndex = 0; return; }
+      if (l === res.client || l.replace(/^[*_]+|[*_]+$/g, '') === res.client || GREETING.test(l) || MAP_LINK.test(l)) { MAP_LINK.lastIndex = 0; return; }
       MAP_LINK.lastIndex = 0;
       if (findPhones(l).length && l.replace(/[\d\s+\-()]/g, '').length < 3) return;
       res.notes.push(l);
