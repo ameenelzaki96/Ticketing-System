@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>FleetOo · Installation Tickets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#fff; --ink:#15181d; --muted:#6b7280; --line:#e4e6ea;
+    --brand:#0b5cff; --brand-ink:#fff;
+    --new:#d97706; --new-bg:#fef3c7;
+    --assigned:#2563eb; --assigned-bg:#dbeafe;
+    --in_progress:#7c3aed; --in_progress-bg:#ede9fe;
+    --closed:#059669; --closed-bg:#d1fae5;
+    --cancelled:#6b7280; --cancelled-bg:#f3f4f6;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "IBM Plex Sans Arabic",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  button,input,select,textarea{font:inherit;color:inherit}
+  a{color:var(--brand)}
+  header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line)}
+  .bar{max-width:980px;margin:0 auto;padding:10px 14px;display:flex;align-items:center;gap:10px}
+  .logo{font-weight:700;font-size:17px;letter-spacing:-.2px}
+  .logo span{color:var(--brand)}
+  .grow{flex:1}
+  .tabs{max-width:980px;margin:0 auto;padding:0 14px;display:flex;gap:4px}
+  .tab{border:0;background:none;padding:10px 12px;border-bottom:2px solid transparent;color:var(--muted);font-weight:600;cursor:pointer}
+  .tab.on{color:var(--ink);border-color:var(--brand)}
+  main{max-width:980px;margin:0 auto;padding:14px 14px 80px}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);white-space:nowrap}
+  .btn:hover{border-color:#c9ccd2}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+  .btn.green{background:#16a34a;border-color:#16a34a;color:#fff}
+  .btn.sm{padding:5px 9px;font-size:13px;border-radius:8px}
+  .btn:disabled{opacity:.5;cursor:default}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap;font-weight:500}
+  .chip b{margin-inline-start:6px;font-weight:700}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .search{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;margin-bottom:12px}
+  .list{display:grid;gap:10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+  .card.closed,.card.cancelled{opacity:.75}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted)}
+  .client{font-weight:700;font-size:16px}
+  .badge{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px}
+  .age{font-size:12px;color:var(--muted)}
+  .meta{margin:8px 0;display:grid;gap:4px;font-size:14px}
+  .meta .k{color:var(--muted);min-width:78px;display:inline-block}
+  .loc{white-space:pre-wrap;word-break:break-word;unicode-bidi:plaintext}
+  .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  select.tech{border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:#fff;max-width:200px}
+  details{margin-top:8px;font-size:13px;color:var(--muted)}
+  details pre{white-space:pre-wrap;background:#f8f9fb;border-radius:8px;padding:8px;margin:6px 0 0;font:13px/1.5 inherit;color:var(--ink)}
+  .empty{text-align:center;color:var(--muted);padding:40px 10px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:12px 0 4px}
+  input[type=text],input[type=tel],textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff}
+  textarea{resize:vertical}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+  @media (max-width:640px){.grid2{grid-template-columns:1fr}}
+  .warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;padding:8px 10px;font-size:13px;margin-top:10px}
+  .hint{font-size:13px;color:var(--muted)}
+  .toast{position:fixed;inset-inline:0;bottom:18px;margin:auto;width:max-content;max-width:90vw;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;z-index:50;opacity:0;transform:translateY(10px);transition:.2s}
+  .toast.show{opacity:1;transform:none}
+  .modal{position:fixed;inset:0;background:rgba(15,18,24,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 12px;z-index:40;overflow:auto}
+  .modal.show{display:flex}
+  .modal .panel{width:100%;max-width:560px}
+  .techrow{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:6px;margin-bottom:6px}
+  @media (max-width:520px){.techrow{grid-template-columns:1fr 1fr}}
+  .demo{background:#fef9c3;color:#713f12;font-size:13px;text-align:center;padding:6px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#16a34a;display:inline-block}
+  .dot.off{background:#dc2626}
+</style>
+</head>
+<body>
+<div id="demoBar" class="demo" hidden></div>
+<header>
+  <div class="bar">
+    <div class="logo">Fleet<span>Oo</span> · <span data-t="title" style="color:inherit;font-weight:600">Installation Tickets</span></div>
+    <div class="grow"></div>
+    <span class="dot" id="netDot" title=""></span>
+    <button class="btn sm" id="refreshBtn" data-t="refresh">Refresh</button>
+    <button class="btn sm" id="langBtn">عربي</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-view="tickets" data-t="tabTickets">Tickets</button>
+    <button class="tab" data-view="new" data-t="tabNew">+ New from WhatsApp</button>
+    <button class="tab" data-view="techs" data-t="tabTechs">Technicians</button>
+  </div>
+</header>
+
+<main>
+  <!-- TICKETS -->
+  <section id="view-tickets">
+    <div class="chips" id="chips"></div>
+    <input class="search" id="search" type="search" data-tp="searchPh" placeholder="Search client, phone, location, technician…">
+    <div class="list" id="list"></div>
+  </section>
+
+  <!-- NEW -->
+  <section id="view-new" hidden>
+    <div class="panel">
+      <label for="raw" style="margin-top:0" data-t="pasteLabel">Paste the WhatsApp message</label>
+      <textarea id="raw" rows="7" data-tp="pastePh" placeholder="Paste the full message here — client name, locations and contact number are picked up automatically."></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="parseBtn" data-t="extract">Extract details</button>
+        <span class="hint" data-t="extractHint">Check the fields below, fix anything, then create.</span>
+      </div>
+      <div class="grid2">
+        <div><label for="f-client" data-t="fClient">Client</label><input type="text" id="f-client"></div>
+        <div><label for="f-phone" data-t="fPhone">Contact number</label><input type="tel" id="f-phone" dir="ltr"></div>
+      </div>
+      <label for="f-locations" data-t="fLocations">Installation location(s) — one per line</label>
+      <textarea id="f-locations" rows="3"></textarea>
+      <div class="grid2">
+        <div><label for="f-devices" data-t="fDevices">No. of devices</label><input type="text" id="f-devices" inputmode="numeric"></div>
+        <div><label for="f-notes" data-t="fNotes">Notes</label><input type="text" id="f-notes"></div>
+      </div>
+      <div id="dupWarn" class="warn" hidden></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn primary" id="createBtn" data-t="create">Create ticket</button>
+        <button class="btn" id="clearBtn" data-t="clear">Clear</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHS -->
+  <section id="view-techs" hidden>
+    <div class="panel">
+      <div class="hint" data-t="techHint">Mustafa's technician network. Phone numbers let you send the job to a technician on WhatsApp in one tap.</div>
+      <div style="margin-top:12px" id="techRows"></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" id="addTechBtn" data-t="addTech">+ Add technician</button>
+        <div class="grow"></div>
+        <button class="btn primary" id="saveTechBtn" data-t="save">Save</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- key prompt -->
+<div class="modal" id="keyModal">
+  <div class="panel">
+    <div class="client" data-t="keyTitle">Enter access key</div>
+    <p class="hint" data-t="keyHint">Open the link you were sent (it ends with #…), or paste the key here.</p>
+    <input type="text" id="keyInput" dir="ltr">
+    <div class="row" style="margin-top:12px"><button class="btn primary" id="keySave" data-t="continue">Continue</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="parser.js"></script>
+<script>
+/* ================= CONFIG =================
+ * Paste your Google Apps Script Web App URL here (ends with /exec).
+ * Leave empty to run in DEMO mode (data stays only in this browser).
+ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbzqjh33CiOrUhFuxlvb1ZqPeHpCCTRkfVPTH0TMGEF18zMTMaP4o6uWHuc3ZPR-Mps/exec';
+const REFRESH_SECONDS = 30;
+/* ========================================== */
+
+const STATUSES = ['new','assigned','in_progress','closed','cancelled'];
+const I18N = {
+  en:{title:'Installation Tickets',refresh:'Refresh',tabTickets:'Tickets',tabNew:'+ New from WhatsApp',tabTechs:'Technicians',
+    searchPh:'Search client, phone, location, technician…',open:'Open',all:'All',
+    s_new:'New',s_assigned:'Assigned',s_in_progress:'In progress',s_closed:'Closed',s_cancelled:'Cancelled',
+    pasteLabel:'Paste the WhatsApp message',pastePh:'Paste the full message here — client name, locations and contact number are picked up automatically.',
+    extract:'Extract details',extractHint:'Check the fields below, fix anything, then create.',
+    fClient:'Client',fPhone:'Contact number',fLocations:'Installation location(s) — one per line',fDevices:'No. of devices',fNotes:'Notes',
+    create:'Create ticket',clear:'Clear',techHint:"Mustafa's technician network. Phone numbers let you send the job to a technician on WhatsApp in one tap.",
+    addTech:'+ Add technician',save:'Save',keyTitle:'Enter access key',keyHint:'Open the link you were sent (it ends with #…), or paste the key here.',continue:'Continue',
+    k_phone:'Contact',k_loc:'Location',k_dev:'Devices',k_tech:'Technician',k_notes:'Notes',
+    assignTo:'Assign to…',unassigned:'— Unassigned —',call:'Call',waClient:'WhatsApp client',sendTech:'Send to technician',
+    start:'Start',close:'Close ticket',reopen:'Reopen',cancel:'Cancel',edit:'Edit',original:'Original message',history:'History',
+    created:'Ticket created',saved:'Saved',empty:'No tickets here.',needClient:'Add a client name or contact number first.',
+    dup:'Heads-up: this number already has an open ticket',techName:'Name',techPhone:'Phone',techArea:'Area / city',remove:'Remove',
+    noTech:'Pick a technician first.',noTechPhone:"This technician has no phone saved.",confirmClose:'Close this ticket?',confirmCancel:'Cancel this ticket?',
+    ago_m:'m ago',ago_h:'h ago',ago_d:'d ago',now:'just now',demo:'DEMO MODE — data is saved only in this browser. Add your Apps Script URL in index.html to share with Mustafa.',
+    offline:'Could not reach the server',editPrompt:'Edit',devicesWord:'devices',
+    waJob:'New GPS installation job'},
+  ar:{title:'تذاكر التركيب',refresh:'تحديث',tabTickets:'التذاكر',tabNew:'+ جديد من واتساب',tabTechs:'الفنيون',
+    searchPh:'ابحث بالعميل، الرقم، الموقع، الفني…',open:'المفتوحة',all:'الكل',
+    s_new:'جديد',s_assigned:'تم الإسناد',s_in_progress:'قيد التنفيذ',s_closed:'مغلق',s_cancelled:'ملغي',
+    pasteLabel:'الصق رسالة الواتساب',pastePh:'الصق الرسالة كاملة هنا — يتم استخراج اسم العميل والمواقع ورقم التواصل تلقائياً.',
+    extract:'استخراج البيانات',extractHint:'راجع الحقول وعدّل ما يلزم ثم أنشئ التذكرة.',
+    fClient:'العميل',fPhone:'رقم التواصل',fLocations:'موقع/مواقع التركيب — كل موقع في سطر',fDevices:'عدد الأجهزة',fNotes:'ملاحظات',
+    create:'إنشاء تذكرة',clear:'مسح',techHint:'شبكة فنيي مصطفى. حفظ رقم الجوال يتيح إرسال المهمة للفني على واتساب بضغطة واحدة.',
+    addTech:'+ إضافة فني',save:'حفظ',keyTitle:'أدخل مفتاح الدخول',keyHint:'افتح الرابط المرسل لك (ينتهي بـ #…) أو الصق المفتاح هنا.',continue:'متابعة',
+    k_phone:'التواصل',k_loc:'الموقع',k_dev:'الأجهزة',k_tech:'الفني',k_notes:'ملاحظات',
+    assignTo:'إسناد إلى…',unassigned:'— بدون فني —',call:'اتصال',waClient:'واتساب العميل',sendTech:'إرسال للفني',
+    start:'بدء التنفيذ',close:'إغلاق التذكرة',reopen:'إعادة فتح',cancel:'إلغاء',edit:'تعديل',original:'الرسالة الأصلية',history:'السجل',
+    created:'تم إنشاء التذكرة',saved:'تم الحفظ',empty:'لا توجد تذاكر هنا.',needClient:'أضف اسم العميل أو رقم التواصل أولاً.',
+    dup:'تنبيه: يوجد تذكرة مفتوحة لنفس الرقم',techName:'الاسم',techPhone:'الجوال',techArea:'المنطقة / المدينة',remove:'حذف',
+    noTech:'اختر فنياً أولاً.',noTechPhone:'لا يوجد رقم جوال لهذا الفني.',confirmClose:'إغلاق هذه التذكرة؟',confirmCancel:'إلغاء هذه التذكرة؟',
+    ago_m:'د',ago_h:'س',ago_d:'ي',now:'الآن',demo:'وضع تجريبي — البيانات محفوظة في هذا المتصفح فقط. أضف رابط Apps Script في index.html للمشاركة مع مصطفى.',
+    offline:'تعذر الاتصال بالخادم',editPrompt:'تعديل',devicesWord:'أجهزة',
+    waJob:'مهمة تركيب جهاز تتبع جديدة'}
+};
+
+let lang = localStorage.getItem('ft_lang') || 'en';
+let state = { tickets: [], technicians: [], filter: 'open', q: '' };
+const $ = s => document.querySelector(s);
+const t = k => (I18N[lang][k] ?? I18N.en[k] ?? k);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- key ---------- */
+(function initKey(){
+  const h = decodeURIComponent(location.hash.replace(/^#/, ''));
+  if (h) { localStorage.setItem('ft_key', h); history.replaceState(null, '', location.pathname + location.search); }
+})();
+const getKey = () => localStorage.getItem('ft_key') || '';
+
+/* ---------- data layer ---------- */
+const DEMO = !API_URL;
+const Store = {
+  async load(){
+    if (DEMO) return { tickets: JSON.parse(localStorage.getItem('ft_demo_t')||'[]'), technicians: JSON.parse(localStorage.getItem('ft_demo_x')||'[]') };
+    const r = await fetch(API_URL + '?key=' + encodeURIComponent(getKey()) + '&_=' + Date.now());
+    const j = await r.json(); if (!j.ok) throw new Error(j.error); return j;
+  },
+  async post(body){
+    if (DEMO) return demoPost(body);
+    const r = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(Object.assign({key:getKey()}, body)) });
+    const j = await r.json(); if (!j.ok) throw new Error(j.error); return j;
+  }
+};
+function demoPost(b){
+  const T = JSON.parse(localStorage.getItem('ft_demo_t')||'[]'); const now = new Date().toISOString();
+  let out = {};
+  if (b.action==='create'){ const n = T.length+1; const tk = Object.assign({id:'T-'+String(n).padStart(4,'0'),createdAt:now,status:'new',technician:'',updatedAt:now,closedAt:'',history:JSON.stringify([{at:now,what:'created'}])}, b.ticket); T.push(tk); out.ticket = tk; }
+  if (b.action==='update'){ const tk = T.find(x=>x.id===b.id); const h = JSON.parse(tk.history||'[]');
+    for (const k in b.changes){ if (String(tk[k]??'')!==String(b.changes[k])) { h.push({at:now,what:k,from:tk[k],to:b.changes[k]}); tk[k]=b.changes[k]; } }
+    tk.closedAt = tk.status==='closed' ? (tk.closedAt||now) : ''; tk.updatedAt = now; tk.history = JSON.stringify(h); out.ticket = tk; }
+  if (b.action==='saveTechs'){ localStorage.setItem('ft_demo_x', JSON.stringify(b.technicians)); out.technicians = b.technicians; }
+  localStorage.setItem('ft_demo_t', JSON.stringify(T)); return out;
+}
+
+async function refresh(silent){
+  try {
+    const d = await Store.load();
+    state.tickets = d.tickets || []; state.technicians = d.technicians || [];
+    setNet(true); render();
+  } catch(e){
+    setNet(false, e.message);
+    if (/key/i.test(e.message)) showKey(); else if (!silent) toast(t('offline') + ': ' + e.message);
+  }
+}
+function setNet(ok, msg){ const d=$('#netDot'); d.classList.toggle('off', !ok); d.title = ok ? 'Connected' : (msg||'Offline'); }
+
+/* ---------- render ---------- */
+function applyLang(){
+  document.documentElement.lang = lang; document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
+  document.querySelectorAll('[data-tp]').forEach(el => el.placeholder = t(el.dataset.tp));
+  $('#langBtn').textContent = lang==='ar' ? 'English' : 'عربي';
+  if (DEMO){ $('#demoBar').hidden = false; $('#demoBar').textContent = t('demo'); }
+  render(); renderTechs();
+}
+
+function ago(iso){
+  const m = Math.max(0, (Date.now() - new Date(iso)) / 60000);
+  if (m < 1) return t('now');
+  if (m < 60) return Math.floor(m) + t('ago_m');
+  if (m < 1440) return Math.floor(m/60) + t('ago_h');
+  return Math.floor(m/1440) + t('ago_d');
+}
+const isOpen = tk => tk.status!=='closed' && tk.status!=='cancelled';
+
+function render(){
+  const counts = { open:0, all:state.tickets.length }; STATUSES.forEach(s=>counts[s]=0);
+  state.tickets.forEach(tk => { counts[tk.status]=(counts[tk.status]||0)+1; if (isOpen(tk)) counts.open++; });
+  const chipDefs = [['open',t('open')], ...STATUSES.map(s=>[s,t('s_'+s)]), ['all',t('all')]];
+  $('#chips').innerHTML = chipDefs.map(([k,l]) => `<button class="chip ${state.filter===k?'on':''}" data-f="${k}">${esc(l)}<b>${counts[k]||0}</b></button>`).join('');
+
+  const q = state.q.toLowerCase();
+  let rows = state.tickets.filter(tk =>
+    (state.filter==='all' || (state.filter==='open' ? isOpen(tk) : tk.status===state.filter)) &&
+    (!q || [tk.id,tk.client,tk.phone,tk.locations,tk.technician,tk.notes].join(' ').toLowerCase().includes(q)));
+  const order = {new:0,assigned:1,in_progress:2,closed:3,cancelled:4};
+  rows.sort((a,b) => (order[a.status]-order[b.status]) || (isOpen(a) ? new Date(a.createdAt)-new Date(b.createdAt) : new Date(b.updatedAt)-new Date(a.updatedAt)));
+
+  $('#list').innerHTML = rows.length ? rows.map(card).join('') : `<div class="empty">${esc(t('empty'))}</div>`;
+}
+
+function locHtml(s){
+  return esc(s).replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}" target="_blank" rel="noopener">📍 ${u.length>40?u.slice(0,40)+'…':u}</a>`);
+}
+function waNumber(p){ let d = String(p||'').replace(/\D/g,''); if (/^05\d{8}$/.test(d)) d = '966'+d.slice(1); else if (/^5\d{8}$/.test(d)) d='966'+d; return d; }
+
+function card(tk){
+  const s = tk.status;
+  const techOpts = [`<option value="">${esc(t('unassigned'))}</option>`]
+    .concat(state.technicians.map(x => `<option ${x.name===tk.technician?'selected':''} value="${esc(x.name)}">${esc(x.name)}${x.area?' · '+esc(x.area):''}</option>`));
+  if (tk.technician && !state.technicians.some(x=>x.name===tk.technician)) techOpts.push(`<option selected value="${esc(tk.technician)}">${esc(tk.technician)}</option>`);
+  const hist = (()=>{ try { return JSON.parse(tk.history||'[]'); } catch(e){ return []; } })();
+  const btns = [];
+  if (isOpen(tk)) {
+    if (s!=='in_progress') btns.push(`<button class="btn sm" data-act="status" data-v="in_progress">▶ ${esc(t('start'))}</button>`);
+    btns.push(`<button class="btn sm green" data-act="status" data-v="closed">✓ ${esc(t('close'))}</button>`);
+    btns.push(`<button class="btn sm" data-act="status" data-v="cancelled">${esc(t('cancel'))}</button>`);
+  } else btns.push(`<button class="btn sm" data-act="reopen">↺ ${esc(t('reopen'))}</button>`);
+
+  return `<article class="card ${s}" data-id="${esc(tk.id)}">
+    <div class="row">
+      <span class="badge" style="color:var(--${s});background:var(--${s}-bg)">${esc(t('s_'+s))}</span>
+      <span class="client">${esc(tk.client||'—')}</span>
+      <div class="grow"></div>
+      <span class="id">${esc(tk.id)}</span><span class="age">· ${esc(ago(tk.createdAt))}</span>
+    </div>
+    <div class="meta">
+      ${tk.phone?`<div><span class="k">${esc(t('k_phone'))}</span> <a href="tel:${esc(tk.phone)}" dir="ltr">${esc(tk.phone)}</a></div>`:''}
+      ${tk.locations?`<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="k">${esc(t('k_loc'))}</span> <span class="loc">${locHtml(tk.locations)}</span></div>`:''}
+      ${tk.devices?`<div><span class="k">${esc(t('k_dev'))}</span> ${esc(tk.devices)}</div>`:''}
+      ${tk.notes?`<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="k">${esc(t('k_notes'))}</span> <span class="loc">${esc(tk.notes)}</span></div>`:''}
+    </div>
+    <div class="row">
+      <span class="k hint">${esc(t('k_tech'))}</span>
+      <select class="tech" data-act="tech" ${isOpen(tk)?'':'disabled'}>${techOpts.join('')}</select>
+      ${tk.technician?`<button class="btn sm" data-act="sendTech">📤 ${esc(t('sendTech'))}</button>`:''}
+    </div>
+    <div class="actions">
+      ${btns.join('')}
+      <div class="grow"></div>
+      ${tk.phone?`<a class="btn sm" href="tel:${esc(tk.phone)}">📞 ${esc(t('call'))}</a><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/${waNumber(tk.phone)}">💬 ${esc(t('waClient'))}</a>`:''}
+      <button class="btn sm" data-act="edit">✎ ${esc(t('edit'))}</button>
+    </div>
+    ${tk.raw?`<details><summary>${esc(t('original'))}</summary><pre>${esc(tk.raw)}</pre></details>`:''}
+    ${hist.length>1?`<details><summary>${esc(t('history'))}</summary><pre>${hist.map(h=>`${new Date(h.at).toLocaleString()} — ${h.what}${h.to!==undefined?': '+(h.from||'∅')+' → '+(h.to||'∅'):''}`).map(esc).join('\n')}</pre></details>`:''}
+  </article>`;
+}
+
+/* ---------- ticket actions ---------- */
+async function update(id, changes){
+  const tk = state.tickets.find(x=>x.id===id); const before = Object.assign({}, tk);
+  Object.assign(tk, changes); render();                       // optimistic
+  try { const r = await Store.post({action:'update', id, changes, by:'web'}); Object.assign(tk, r.ticket); render(); toast(t('saved')); }
+  catch(e){ Object.assign(tk, before); render(); toast(t('offline')+': '+e.message); }
+}
+
+$('#list').addEventListener('change', e => {
+  const sel = e.target.closest('[data-act="tech"]'); if (!sel) return;
+  const id = sel.closest('.card').dataset.id; const tk = state.tickets.find(x=>x.id===id);
+  const changes = { technician: sel.value };
+  if (sel.value && tk.status==='new') changes.status = 'assigned';
+  if (!sel.value && tk.status==='assigned') changes.status = 'new';
+  update(id, changes);
+});
+
+$('#list').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if (!b) return;
+  const id = b.closest('.card').dataset.id; const tk = state.tickets.find(x=>x.id===id);
+  const act = b.dataset.act;
+  if (act==='status'){
+    const v = b.dataset.v;
+    if (v==='closed' && !confirm(t('confirmClose'))) return;
+    if (v==='cancelled' && !confirm(t('confirmCancel'))) return;
+    update(id, {status:v});
+  }
+  if (act==='reopen') update(id, {status: tk.technician ? 'assigned' : 'new'});
+  if (act==='sendTech'){
+    const tech = state.technicians.find(x=>x.name===tk.technician);
+    if (!tech) return toast(t('noTech'));
+    if (!tech.phone) return toast(t('noTechPhone'));
+    const L = I18N[lang];
+    const msg = [`*${L.waJob}* — ${tk.id}`, `${L.fClient}: ${tk.client}`, tk.phone?`${L.fPhone}: ${tk.phone}`:'',
+      tk.devices?`${L.fDevices}: ${tk.devices}`:'', tk.locations?`${L.k_loc}:\n${tk.locations}`:'', tk.notes?`${L.k_notes}: ${tk.notes}`:''].filter(Boolean).join('\n');
+    window.open(`https://wa.me/${waNumber(tech.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+  if (act==='edit') openEdit(tk);
+});
+
+function openEdit(tk){
+  const fields = ['client','phone','locations','devices','notes'];
+  const labels = {client:'fClient',phone:'fPhone',locations:'fLocations',devices:'fDevices',notes:'fNotes'};
+  const m = document.createElement('div'); m.className='modal show';
+  m.innerHTML = `<div class="panel"><div class="client">${esc(t('edit'))} · ${esc(tk.id)}</div>
+    ${fields.map(f=>`<label>${esc(t(labels[f]))}</label>${f==='locations'||f==='notes'?`<textarea rows="3" data-f="${f}">${esc(tk[f])}</textarea>`:`<input type="text" data-f="${f}" value="${esc(tk[f])}">`}`).join('')}
+    <div class="row" style="margin-top:14px"><button class="btn primary" data-ok>${esc(t('save'))}</button><button class="btn" data-x>${esc(t('cancel'))}</button></div></div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click', e => {
+    if (e.target===m || e.target.hasAttribute('data-x')) m.remove();
+    if (e.target.hasAttribute('data-ok')) { const ch={}; m.querySelectorAll('[data-f]').forEach(i=>ch[i.dataset.f]=i.value.trim()); m.remove(); update(tk.id, ch); }
+  });
+}
+
+/* ---------- new ticket ---------- */
+const F = k => $('#f-'+k);
+function fillFromRaw(){
+  const p = WAParser.parse($('#raw').value);
+  F('client').value = p.client; F('phone').value = p.phone; F('locations').value = p.locations;
+  F('devices').value = p.devices; F('notes').value = p.notes;
+  checkDup();
+}
+function checkDup(){
+  const ph = WAParser.findPhones(WAParser.toLatinDigits(F('phone').value))[0];
+  const hit = ph && state.tickets.find(x => isOpen(x) && WAParser.findPhones(x.phone||'')[0]===ph);
+  $('#dupWarn').hidden = !hit; if (hit) $('#dupWarn').textContent = `${t('dup')}: ${hit.id} · ${hit.client}`;
+}
+$('#parseBtn').onclick = fillFromRaw;
+$('#raw').addEventListener('paste', () => setTimeout(fillFromRaw, 0));
+F('phone').addEventListener('input', checkDup);
+$('#clearBtn').onclick = () => { $('#raw').value=''; ['client','phone','locations','devices','notes'].forEach(k=>F(k).value=''); $('#dupWarn').hidden=true; $('#raw').focus(); };
+$('#createBtn').onclick = async () => {
+  if ($('#raw').value.trim() && !F('client').value && !F('phone').value) fillFromRaw();
+  const ticket = { client:F('client').value.trim(), phone:F('phone').value.trim(), locations:F('locations').value.trim(),
+    devices:F('devices').value.trim(), notes:F('notes').value.trim(), raw:$('#raw').value.trim() };
+  if (!ticket.client && !ticket.phone) return toast(t('needClient'));
+  const btn = $('#createBtn'); btn.disabled = true;
+  try { const r = await Store.post({action:'create', ticket}); state.tickets.push(r.ticket); toast(`${t('created')}: ${r.ticket.id}`); $('#clearBtn').click(); render(); }
+  catch(e){ toast(t('offline')+': '+e.message); }
+  finally { btn.disabled = false; }
+};
+
+/* ---------- technicians ---------- */
+let techDraft = [];
+function renderTechs(){
+  $('#techRows').innerHTML = techDraft.map((x,i)=>`<div class="techrow">
+    <input type="text" data-i="${i}" data-k="name" placeholder="${esc(t('techName'))}" value="${esc(x.name)}">
+    <input type="tel" dir="ltr" data-i="${i}" data-k="phone" placeholder="${esc(t('techPhone'))}" value="${esc(x.phone)}">
+    <input type="text" data-i="${i}" data-k="area" placeholder="${esc(t('techArea'))}" value="${esc(x.area)}">
+    <button class="btn sm" data-rm="${i}">${esc(t('remove'))}</button></div>`).join('');
+}
+$('#techRows').addEventListener('input', e => { const i=e.target.dataset.i; if (i!==undefined) techDraft[i][e.target.dataset.k] = e.target.value; });
+$('#techRows').addEventListener('click', e => { const i=e.target.dataset.rm; if (i!==undefined){ techDraft.splice(i,1); renderTechs(); } });
+$('#addTechBtn').onclick = () => { techDraft.push({name:'',phone:'',area:''}); renderTechs(); $('#techRows .techrow:last-child input').focus(); };
+$('#saveTechBtn').onclick = async () => {
+  try { const r = await Store.post({action:'saveTechs', technicians: techDraft.filter(x=>x.name.trim())}); state.technicians = r.technicians; toast(t('saved')); render(); }
+  catch(e){ toast(t('offline')+': '+e.message); }
+};
+
+/* ---------- shell ---------- */
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on', x===b));
+  ['tickets','new','techs'].forEach(v => $('#view-'+v).hidden = v!==b.dataset.view);
+  if (b.dataset.view==='techs'){ techDraft = state.technicians.map(x=>Object.assign({},x)); if (!techDraft.length) techDraft.push({name:'',phone:'',area:''}); renderTechs(); }
+  if (b.dataset.view==='new') $('#raw').focus();
+});
+$('#chips').addEventListener('click', e => { const c=e.target.closest('[data-f]'); if (c){ state.filter=c.dataset.f; render(); } });
+$('#search').addEventListener('input', e => { state.q = e.target.value; render(); });
+$('#refreshBtn').onclick = () => refresh();
+$('#langBtn').onclick = () => { lang = lang==='ar'?'en':'ar'; localStorage.setItem('ft_lang', lang); applyLang(); };
+
+function showKey(){ $('#keyModal').classList.add('show'); $('#keyInput').focus(); }
+$('#keySave').onclick = () => { const k=$('#keyInput').value.trim(); if(!k) return; localStorage.setItem('ft_key', k); $('#keyModal').classList.remove('show'); refresh(); };
+
+let toastT; function toast(m){ const el=$('#toast'); el.textContent=m; el.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'), 2600); }
+
+applyLang();
+if (!DEMO && !getKey()) showKey(); else refresh();
+setInterval(() => { if (!document.hidden && !document.querySelector('.modal.show')) refresh(true); }, REFRESH_SECONDS*1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(true); });
+</script>
+</body>
+</html>
