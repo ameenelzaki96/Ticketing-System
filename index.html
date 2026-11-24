@@ -73,6 +73,25 @@
   .modal .panel{width:100%;max-width:560px}
   .techrow{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:6px;margin-bottom:6px}
   @media (max-width:520px){.techrow{grid-template-columns:1fr 1fr}}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+  .seg button{border:0;background:none;padding:8px 14px;cursor:pointer;font-weight:600;color:var(--muted)}
+  .seg button+button{border-inline-start:1px solid var(--line)}
+  .seg button.on{background:var(--ink);color:#fff}
+  .seg button b{margin-inline-start:4px}
+  #typeFilter button{white-space:nowrap}
+  .mix{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .mix>div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
+  .mix input{border:0;padding:0;font-size:20px;font-weight:700;width:100%;background:none;outline:none;color:var(--ink)}
+  .mix .tot{background:#f8f9fb}
+  .mix .tot b{font-size:20px;color:var(--ink)}
+  @media (max-width:640px){.mix{grid-template-columns:1fr 1fr}}
+  .typebar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .tbadge{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:#fff}
+  .tbadge.maintenance{background:#fff1f2;border-color:#fecdd3;color:#be123c}
+  .tbadge.installation{background:#f0f9ff;border-color:#bae6fd;color:#0369a1}
+  .pills{display:flex;gap:6px;flex-wrap:wrap}
+  .pill{font-size:13px;background:#f3f4f6;border-radius:8px;padding:2px 8px}
+  .pill b{margin-inline-end:4px}
   .demo{background:#fef9c3;color:#713f12;font-size:13px;text-align:center;padding:6px}
   .dot{width:8px;height:8px;border-radius:50%;background:#16a34a;display:inline-block}
   .dot.off{background:#dc2626}
@@ -98,6 +117,7 @@
 <main>
   <!-- TICKETS -->
   <section id="view-tickets">
+    <div class="typebar"><div class="seg" id="typeFilter"></div></div>
     <div class="chips" id="chips"></div>
     <input class="search" id="search" type="search" data-tp="searchPh" placeholder="Search client, phone, location, technician…">
     <div class="list" id="list"></div>
@@ -112,15 +132,29 @@
         <button class="btn" id="parseBtn" data-t="extract">Extract details</button>
         <span class="hint" data-t="extractHint">Check the fields below, fix anything, then create.</span>
       </div>
+      <label data-t="fType">Ticket type</label>
+      <div class="seg" id="typeSeg">
+        <button type="button" class="on" data-type="installation">📦 <span data-t="ty_installation">New installation</span></button>
+        <button type="button" data-type="maintenance">🛠 <span data-t="ty_maintenance">Maintenance</span></button>
+      </div>
       <div class="grid2">
         <div><label for="f-client" data-t="fClient">Client</label><input type="text" id="f-client"></div>
         <div><label for="f-phone" data-t="fPhone">Contact number</label><input type="tel" id="f-phone" dir="ltr"></div>
       </div>
       <label for="f-locations" data-t="fLocations">Installation location(s) — one per line</label>
       <textarea id="f-locations" rows="3"></textarea>
+      <div id="mixBox">
+        <label data-t="fMix">Devices to install</label>
+        <div class="mix">
+          <div><span data-t="m_trackerOnly">Tracker only</span><input type="number" min="0" id="f-trackerOnly" inputmode="numeric" placeholder="0"></div>
+          <div><span data-t="m_withRelay">Tracker + Relay</span><input type="number" min="0" id="f-withRelay" inputmode="numeric" placeholder="0"></div>
+          <div><span data-t="m_withWeight">Tracker + Weight sensor</span><input type="number" min="0" id="f-withWeight" inputmode="numeric" placeholder="0"></div>
+          <div class="tot"><span data-t="m_total">Total</span><b id="mixTotal">0</b></div>
+        </div>
+      </div>
       <div class="grid2">
-        <div><label for="f-devices" data-t="fDevices">No. of devices</label><input type="text" id="f-devices" inputmode="numeric"></div>
-        <div><label for="f-notes" data-t="fNotes">Notes</label><input type="text" id="f-notes"></div>
+        <div id="devBox"><label for="f-devices" data-t="fDevicesMaint">No. of vehicles / devices</label><input type="text" id="f-devices" inputmode="numeric"></div>
+        <div><label for="f-notes" id="notesLabel" data-t="fNotes">Notes</label><textarea id="f-notes" rows="2"></textarea></div>
       </div>
       <div id="dupWarn" class="warn" hidden></div>
       <div class="row" style="margin-top:14px">
@@ -184,7 +218,10 @@ const I18N = {
     noTech:'Pick a technician first.',noTechPhone:"This technician has no phone saved.",confirmClose:'Close this ticket?',confirmCancel:'Cancel this ticket?',
     ago_m:'m ago',ago_h:'h ago',ago_d:'d ago',now:'just now',demo:'DEMO MODE — data is saved only in this browser. Add your Apps Script URL in index.html to share with Mustafa.',
     offline:'Could not reach the server',editPrompt:'Edit',devicesWord:'devices',
-    waJob:'New GPS installation job'},
+    waJob:'New GPS installation job',waJobMaint:'GPS maintenance job',
+    fType:'Ticket type',ty_installation:'New installation',ty_maintenance:'Maintenance',fMix:'Devices to install',
+    m_trackerOnly:'Tracker only',m_withRelay:'Tracker + Relay',m_withWeight:'Tracker + Weight sensor',m_total:'Total',
+    fDevicesMaint:'No. of vehicles / devices',fIssue:'Issue / problem',allTypes:'All types',tyPl_installation:'Installations',tyPl_maintenance:'Maintenance'},
   ar:{title:'تذاكر التركيب',refresh:'تحديث',tabTickets:'التذاكر',tabNew:'+ جديد من واتساب',tabTechs:'الفنيون',
     searchPh:'ابحث بالعميل، الرقم، الموقع، الفني…',open:'المفتوحة',all:'الكل',
     s_new:'جديد',s_assigned:'تم الإسناد',s_in_progress:'قيد التنفيذ',s_closed:'مغلق',s_cancelled:'ملغي',
@@ -201,11 +238,16 @@ const I18N = {
     noTech:'اختر فنياً أولاً.',noTechPhone:'لا يوجد رقم جوال لهذا الفني.',confirmClose:'إغلاق هذه التذكرة؟',confirmCancel:'إلغاء هذه التذكرة؟',
     ago_m:'د',ago_h:'س',ago_d:'ي',now:'الآن',demo:'وضع تجريبي — البيانات محفوظة في هذا المتصفح فقط. أضف رابط Apps Script في index.html للمشاركة مع مصطفى.',
     offline:'تعذر الاتصال بالخادم',editPrompt:'تعديل',devicesWord:'أجهزة',
-    waJob:'مهمة تركيب جهاز تتبع جديدة'}
+    waJob:'مهمة تركيب جهاز تتبع جديدة',waJobMaint:'مهمة صيانة جهاز تتبع',
+    fType:'نوع التذكرة',ty_installation:'تركيب جديد',ty_maintenance:'صيانة',fMix:'الأجهزة المطلوب تركيبها',
+    m_trackerOnly:'جهاز تتبع فقط',m_withRelay:'جهاز تتبع + ريلاي',m_withWeight:'جهاز تتبع + حساس وزن',m_total:'الإجمالي',
+    fDevicesMaint:'عدد المركبات / الأجهزة',fIssue:'المشكلة / العطل',allTypes:'كل الأنواع',tyPl_installation:'التركيبات',tyPl_maintenance:'الصيانة'}
 };
 
 let lang = localStorage.getItem('ft_lang') || 'en';
-let state = { tickets: [], technicians: [], filter: 'open', q: '' };
+let state = { tickets: [], technicians: [], filter: 'open', typeFilter: 'all', q: '' };
+const MIX = ['trackerOnly','withRelay','withWeight'];
+const typeOf = tk => tk.type === 'maintenance' ? 'maintenance' : 'installation';
 const $ = s => document.querySelector(s);
 const t = k => (I18N[lang][k] ?? I18N.en[k] ?? k);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -261,7 +303,7 @@ function applyLang(){
   document.querySelectorAll('[data-tp]').forEach(el => el.placeholder = t(el.dataset.tp));
   $('#langBtn').textContent = lang==='ar' ? 'English' : 'عربي';
   if (DEMO){ $('#demoBar').hidden = false; $('#demoBar').textContent = t('demo'); }
-  render(); renderTechs();
+  render(); renderTechs(); setType(newType);
 }
 
 function ago(iso){
@@ -274,13 +316,18 @@ function ago(iso){
 const isOpen = tk => tk.status!=='closed' && tk.status!=='cancelled';
 
 function render(){
-  const counts = { open:0, all:state.tickets.length }; STATUSES.forEach(s=>counts[s]=0);
-  state.tickets.forEach(tk => { counts[tk.status]=(counts[tk.status]||0)+1; if (isOpen(tk)) counts.open++; });
+  const tc = { all: state.tickets.filter(isOpen).length, installation:0, maintenance:0 };
+  state.tickets.forEach(tk => { if (isOpen(tk)) tc[typeOf(tk)]++; });
+  $('#typeFilter').innerHTML = [['all',t('allTypes')],['installation','📦 '+t('tyPl_installation')],['maintenance','🛠 '+t('tyPl_maintenance')]]
+    .map(([k,l]) => `<button class="${state.typeFilter===k?'on':''}" data-tf="${k}">${esc(l)} <b>${tc[k]}</b></button>`).join('');
+  const pool = state.tickets.filter(tk => state.typeFilter==='all' || typeOf(tk)===state.typeFilter);
+  const counts = { open:0, all:pool.length }; STATUSES.forEach(s=>counts[s]=0);
+  pool.forEach(tk => { counts[tk.status]=(counts[tk.status]||0)+1; if (isOpen(tk)) counts.open++; });
   const chipDefs = [['open',t('open')], ...STATUSES.map(s=>[s,t('s_'+s)]), ['all',t('all')]];
   $('#chips').innerHTML = chipDefs.map(([k,l]) => `<button class="chip ${state.filter===k?'on':''}" data-f="${k}">${esc(l)}<b>${counts[k]||0}</b></button>`).join('');
 
   const q = state.q.toLowerCase();
-  let rows = state.tickets.filter(tk =>
+  let rows = pool.filter(tk =>
     (state.filter==='all' || (state.filter==='open' ? isOpen(tk) : tk.status===state.filter)) &&
     (!q || [tk.id,tk.client,tk.phone,tk.locations,tk.technician,tk.notes].join(' ').toLowerCase().includes(q)));
   const order = {new:0,assigned:1,in_progress:2,closed:3,cancelled:4};
@@ -293,6 +340,15 @@ function locHtml(s){
   return esc(s).replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}" target="_blank" rel="noopener">📍 ${u.length>40?u.slice(0,40)+'…':u}</a>`);
 }
 function waNumber(p){ let d = String(p||'').replace(/\D/g,''); if (/^05\d{8}$/.test(d)) d = '966'+d.slice(1); else if (/^5\d{8}$/.test(d)) d='966'+d; return d; }
+
+function mixPills(tk){
+  if (typeOf(tk)!=='installation') return '';
+  const parts = MIX.filter(k => Number(tk[k])>0).map(k => `<span class="pill"><b>${esc(tk[k])}×</b>${esc(t('m_'+k))}</span>`);
+  return parts.join('');
+}
+function mixText(tk, L){
+  return MIX.filter(k => Number(tk[k])>0).map(k => `• ${tk[k]} × ${L['m_'+k]}`).join('\n');
+}
 
 function card(tk){
   const s = tk.status;
@@ -310,6 +366,7 @@ function card(tk){
   return `<article class="card ${s}" data-id="${esc(tk.id)}">
     <div class="row">
       <span class="badge" style="color:var(--${s});background:var(--${s}-bg)">${esc(t('s_'+s))}</span>
+      <span class="tbadge ${typeOf(tk)}">${typeOf(tk)==='maintenance'?'🛠':'📦'} ${esc(t('ty_'+typeOf(tk)))}</span>
       <span class="client">${esc(tk.client||'—')}</span>
       <div class="grow"></div>
       <span class="id">${esc(tk.id)}</span><span class="age">· ${esc(ago(tk.createdAt))}</span>
@@ -317,8 +374,9 @@ function card(tk){
     <div class="meta">
       ${tk.phone?`<div><span class="k">${esc(t('k_phone'))}</span> <a href="tel:${esc(tk.phone)}" dir="ltr">${esc(tk.phone)}</a></div>`:''}
       ${tk.locations?`<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="k">${esc(t('k_loc'))}</span> <span class="loc">${locHtml(tk.locations)}</span></div>`:''}
-      ${tk.devices?`<div><span class="k">${esc(t('k_dev'))}</span> ${esc(tk.devices)}</div>`:''}
-      ${tk.notes?`<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="k">${esc(t('k_notes'))}</span> <span class="loc">${esc(tk.notes)}</span></div>`:''}
+      ${mixPills(tk) ? `<div class="row"><span class="k">${esc(t('k_dev'))}</span> <span class="pills">${mixPills(tk)}</span></div>`
+        : (tk.devices?`<div><span class="k">${esc(t('k_dev'))}</span> ${esc(tk.devices)}</div>`:'')}
+      ${tk.notes?`<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="k">${esc(typeOf(tk)==='maintenance'?t('fIssue'):t('k_notes'))}</span> <span class="loc">${esc(tk.notes)}</span></div>`:''}
     </div>
     <div class="row">
       <span class="k hint">${esc(t('k_tech'))}</span>
@@ -369,8 +427,10 @@ $('#list').addEventListener('click', e => {
     if (!tech) return toast(t('noTech'));
     if (!tech.phone) return toast(t('noTechPhone'));
     const L = I18N[lang];
-    const msg = [`*${L.waJob}* — ${tk.id}`, `${L.fClient}: ${tk.client}`, tk.phone?`${L.fPhone}: ${tk.phone}`:'',
-      tk.devices?`${L.fDevices}: ${tk.devices}`:'', tk.locations?`${L.k_loc}:\n${tk.locations}`:'', tk.notes?`${L.k_notes}: ${tk.notes}`:''].filter(Boolean).join('\n');
+    const maint = typeOf(tk)==='maintenance'; const mt = mixText(tk, L);
+    const msg = [`*${maint?L.waJobMaint:L.waJob}* — ${tk.id}`, `${L.fClient}: ${tk.client}`, tk.phone?`${L.fPhone}: ${tk.phone}`:'',
+      mt ? `${L.fMix}:\n${mt}` : (tk.devices?`${L.fDevices}: ${tk.devices}`:''), tk.locations?`${L.k_loc}:\n${tk.locations}`:'',
+      tk.notes?`${maint?L.fIssue:L.k_notes}: ${tk.notes}`:''].filter(Boolean).join('\n');
     window.open(`https://wa.me/${waNumber(tech.phone)}?text=${encodeURIComponent(msg)}`, '_blank');
   }
   if (act==='edit') openEdit(tk);
@@ -378,24 +438,51 @@ $('#list').addEventListener('click', e => {
 
 function openEdit(tk){
   const fields = ['client','phone','locations','devices','notes'];
-  const labels = {client:'fClient',phone:'fPhone',locations:'fLocations',devices:'fDevices',notes:'fNotes'};
+  const labels = {client:'fClient',phone:'fPhone',locations:'fLocations',devices:'fDevicesMaint',notes:'fNotes'};
   const m = document.createElement('div'); m.className='modal show';
+  const ty = typeOf(tk);
   m.innerHTML = `<div class="panel"><div class="client">${esc(t('edit'))} · ${esc(tk.id)}</div>
+    <label>${esc(t('fType'))}</label>
+    <div class="seg" data-seg>${['installation','maintenance'].map(x=>`<button type="button" data-ty="${x}" class="${ty===x?'on':''}">${esc(t('ty_'+x))}</button>`).join('')}</div>
+    <div data-mix ${ty==='maintenance'?'hidden':''}><label>${esc(t('fMix'))}</label><div class="mix">
+      ${MIX.map(k=>`<div><span>${esc(t('m_'+k))}</span><input type="number" min="0" data-f="${k}" value="${esc(tk[k])}" placeholder="0"></div>`).join('')}</div></div>
     ${fields.map(f=>`<label>${esc(t(labels[f]))}</label>${f==='locations'||f==='notes'?`<textarea rows="3" data-f="${f}">${esc(tk[f])}</textarea>`:`<input type="text" data-f="${f}" value="${esc(tk[f])}">`}`).join('')}
     <div class="row" style="margin-top:14px"><button class="btn primary" data-ok>${esc(t('save'))}</button><button class="btn" data-x>${esc(t('cancel'))}</button></div></div>`;
   document.body.appendChild(m);
+  let curType = ty;
   m.addEventListener('click', e => {
+    const tb = e.target.closest('[data-ty]');
+    if (tb){ curType = tb.dataset.ty; m.querySelectorAll('[data-ty]').forEach(b=>b.classList.toggle('on', b===tb)); m.querySelector('[data-mix]').hidden = curType!=='installation'; return; }
     if (e.target===m || e.target.hasAttribute('data-x')) m.remove();
-    if (e.target.hasAttribute('data-ok')) { const ch={}; m.querySelectorAll('[data-f]').forEach(i=>ch[i.dataset.f]=i.value.trim()); m.remove(); update(tk.id, ch); }
+    if (e.target.hasAttribute('data-ok')) {
+      const ch={ type: curType }; m.querySelectorAll('[data-f]').forEach(i=>ch[i.dataset.f]=i.value.trim());
+      if (curType==='installation'){ const tot = MIX.reduce((a,k)=>a+(Number(ch[k])||0),0); if (tot) ch.devices = String(tot); }
+      m.remove(); update(tk.id, ch);
+    }
   });
 }
 
 /* ---------- new ticket ---------- */
 const F = k => $('#f-'+k);
+let newType = 'installation';
+function setType(ty){
+  newType = ty;
+  document.querySelectorAll('#typeSeg [data-type]').forEach(b=>b.classList.toggle('on', b.dataset.type===ty));
+  $('#mixBox').hidden = ty!=='installation';
+  $('#devBox').hidden = ty==='installation';
+  $('#notesLabel').textContent = ty==='maintenance' ? t('fIssue') : t('fNotes');
+}
+function mixTotal(){ const n = MIX.reduce((a,k)=>a+(Number(F(k).value)||0),0); $('#mixTotal').textContent = n; return n; }
+$('#typeSeg').addEventListener('click', e => { const b=e.target.closest('[data-type]'); if (b) setType(b.dataset.type); });
+MIX.forEach(k => F(k).addEventListener('input', mixTotal));
 function fillFromRaw(){
   const p = WAParser.parse($('#raw').value);
   F('client').value = p.client; F('phone').value = p.phone; F('locations').value = p.locations;
   F('devices').value = p.devices; F('notes').value = p.notes;
+  MIX.forEach(k => F(k).value = p[k] || '');
+  // installation with a total but no breakdown found → treat as tracker only
+  if (p.type==='installation' && p.devices && !p.trackerOnly && !p.withRelay && !p.withWeight) F('trackerOnly').value = p.devices;
+  setType(p.type); mixTotal();
   checkDup();
 }
 function checkDup(){
@@ -406,11 +493,12 @@ function checkDup(){
 $('#parseBtn').onclick = fillFromRaw;
 $('#raw').addEventListener('paste', () => setTimeout(fillFromRaw, 0));
 F('phone').addEventListener('input', checkDup);
-$('#clearBtn').onclick = () => { $('#raw').value=''; ['client','phone','locations','devices','notes'].forEach(k=>F(k).value=''); $('#dupWarn').hidden=true; $('#raw').focus(); };
+$('#clearBtn').onclick = () => { $('#raw').value=''; ['client','phone','locations','devices','notes',...MIX].forEach(k=>F(k).value=''); setType('installation'); mixTotal(); $('#dupWarn').hidden=true; $('#raw').focus(); };
 $('#createBtn').onclick = async () => {
   if ($('#raw').value.trim() && !F('client').value && !F('phone').value) fillFromRaw();
-  const ticket = { client:F('client').value.trim(), phone:F('phone').value.trim(), locations:F('locations').value.trim(),
+  const ticket = { type:newType, client:F('client').value.trim(), phone:F('phone').value.trim(), locations:F('locations').value.trim(),
     devices:F('devices').value.trim(), notes:F('notes').value.trim(), raw:$('#raw').value.trim() };
+  if (newType==='installation'){ MIX.forEach(k=>ticket[k]=F(k).value.trim()); const n = mixTotal(); ticket.devices = n ? String(n) : ''; }
   if (!ticket.client && !ticket.phone) return toast(t('needClient'));
   const btn = $('#createBtn'); btn.disabled = true;
   try { const r = await Store.post({action:'create', ticket}); state.tickets.push(r.ticket); toast(`${t('created')}: ${r.ticket.id}`); $('#clearBtn').click(); render(); }
@@ -442,6 +530,7 @@ document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
   if (b.dataset.view==='techs'){ techDraft = state.technicians.map(x=>Object.assign({},x)); if (!techDraft.length) techDraft.push({name:'',phone:'',area:''}); renderTechs(); }
   if (b.dataset.view==='new') $('#raw').focus();
 });
+$('#typeFilter').addEventListener('click', e => { const c=e.target.closest('[data-tf]'); if (c){ state.typeFilter=c.dataset.tf; render(); } });
 $('#chips').addEventListener('click', e => { const c=e.target.closest('[data-f]'); if (c){ state.filter=c.dataset.f; render(); } });
 $('#search').addEventListener('input', e => { state.q = e.target.value; render(); });
 $('#refreshBtn').onclick = () => refresh();

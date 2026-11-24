@@ -12,6 +12,20 @@
 
   const CITIES = /(الرياض|جدة|جده|مكة|مكه|المدينة المنورة|المدينه|الدمام|الخبر|الظهران|الجبيل|الأحساء|الاحساء|الهفوف|القطيف|الطائف|تبوك|بريدة|بريده|عنيزة|القصيم|حائل|أبها|ابها|خميس مشيط|جازان|جيزان|نجران|الباحة|الباحه|ينبع|الخرج|عرعر|سكاكا|الجوف|رابغ|حفر الباطن|riyadh|jeddah|jedda|makkah|mecca|madinah|medina|dammam|khobar|dhahran|jubail|ahsa|hofuf|qatif|taif|tabuk|buraidah|qassim|hail|abha|khamis|jazan|jizan|najran|yanbu|kharj|arar|sakaka|rabigh|hafar)/i;
 
+  const MAINT = /(صيانة|صيانه|عطل|اعطال|أعطال|خربان|لا يعمل|ما يشتغل|مايشتغل|متوقف|فحص|إصلاح|اصلاح|استبدال|تبديل|نقل جهاز|نقل الجهاز|فك|إعادة تركيب|اعادة تركيب|maintenance|repair|fault|faulty|not working|offline|replace|replacement|check[- ]?up|inspection|reinstall|re-install|remove|removal|troubleshoot|issue)/i;
+  const INSTALL = /(تركيب جديد|تركيب|new installation|installation|install)/i;
+  const RELAY = /(ريلاي|ريليه|ريلية|ريلي|relay|قطع (?:المحرك|البنزين|الوقود)|ايقاف المحرك|إيقاف المحرك|immobili[sz]er|cut[- ]?off|engine cut)/i;
+  const WEIGHT = /(حساس(?:ات)? (?:ال)?وزن|حساس(?:ات)? (?:ال)?حمول[ةه]|وزن|weight sensors?|load sensors?|weighing)/i;
+
+  function countNear(text, re) {
+    // number right before or after the keyword: "3 relay", "relay x3", "ريلاي ٢", "2 مع ريلاي"
+    const src = re.source;
+    const before = new RegExp('(?<n>\\d{1,4})\\s*(?:x|×|أجهزة|اجهزة|جهاز|devices?|units?|trackers?|with|مع|ب|بـ|\\+|-|:)?\\s*(?:' + src + ')', 'i');
+    const after = new RegExp('(?:' + src + ')\\s*(?:x|×|:|-|=)?\\s*(?<n>\\d{1,4})(?!\\d)', 'i');
+    let m = text.match(before) || text.match(after);
+    return m ? m.groups.n : '';
+  }
+
   function toLatinDigits(s) {
     return s.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660))
             .replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x06F0));
@@ -102,13 +116,32 @@
 
     // remaining loose lines (minus greeting/client/phones) become notes
     loose.forEach(l => {
-      if (l === res.client || l.replace(/^[*_]+|[*_]+$/g, '') === res.client || GREETING.test(l) || MAP_LINK.test(l)) { MAP_LINK.lastIndex = 0; return; }
+      if (res.locations.includes(l) || l === res.client || l.replace(/^[*_]+|[*_]+$/g, '') === res.client || GREETING.test(l) || MAP_LINK.test(l)) { MAP_LINK.lastIndex = 0; return; }
       MAP_LINK.lastIndex = 0;
       if (findPhones(l).length && l.replace(/[\d\s+\-()]/g, '').length < 3) return;
       res.notes.push(l);
     });
 
+    // ticket type
+    const type = MAINT.test(text) && !/تركيب جديد|new installation/i.test(text) ? 'maintenance' : 'installation';
+
+    // device mix (installation only)
+    let withRelay = '', withWeight = '', trackerOnly = '';
+    if (type === 'installation') {
+      const total = Number(res.devices) || 0;
+      const hasRelay = RELAY.test(text), hasWeight = WEIGHT.test(text);
+      withRelay = hasRelay ? countNear(text, RELAY) : '';
+      withWeight = hasWeight ? countNear(text, WEIGHT) : '';
+      // keyword without a number: if it's the only type mentioned, assume all devices
+      if (hasRelay && !withRelay && !hasWeight && total) withRelay = String(total);
+      if (hasWeight && !withWeight && !hasRelay && total) withWeight = String(total);
+      const rest = total - (Number(withRelay) || 0) - (Number(withWeight) || 0);
+      if (total && rest > 0) trackerOnly = String(rest);
+      if (!total && !hasRelay && !hasWeight) trackerOnly = '';
+    }
+
     return {
+      type, trackerOnly, withRelay, withWeight,
       client: res.client.trim(),
       phone: res.phone,
       otherPhones: res.otherPhones,
