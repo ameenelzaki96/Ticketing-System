@@ -4,49 +4,61 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>FleetOo · Installation Tickets</title>
+<title>Fleetoo · Installation Tickets</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-10%20-10%20300%20260%22%3E%3Cg%20fill%3D%22%234E27A6%22%3E%3Cpath%20d%3D%22M238.29.29h-73.67c-18.29%2C0-37.23-1.36-55.33%2C1.83-4.11.72-8.18%2C1.64-12.2%2C2.75-3.97%2C1.1-7.89%2C2.39-11.75%2C3.86-3.82%2C1.46-7.57%2C3.09-11.24%2C4.9-3.65%2C1.8-7.21%2C3.76-10.67%2C5.88-3.45%2C2.11-6.81%2C4.39-10.05%2C6.81-3.24%2C2.42-6.36%2C4.98-9.37%2C7.68-3%2C2.7-5.88%2C5.53-8.63%2C8.49-2.75%2C2.96-5.36%2C6.04-7.83%2C9.24-2.47%2C3.2-4.8%2C6.52-6.97%2C9.93-2.18%2C3.43-4.2%2C6.96-6.06%2C10.57-1.87%2C3.64-3.56%2C7.36-5.09%2C11.15-1.53%2C3.82-2.89%2C7.72-4.05%2C11.67-1.18%2C3.99-2.17%2C8.04-2.97%2C12.13-.81%2C4.15-1.41%2C8.33-1.82%2C12.54-.41%2C4.26-.61%2C8.54-.61%2C12.82v106.28l79.51-79.51v-20.67c0-4.07.17-8.13.51-12.18.23-2%2C.57-3.98%2C1.03-5.94.89-3.83%2C2.21-7.56%2C3.93-11.09%2C1.69-3.48%2C3.77-6.76%2C6.19-9.79%2C2.4-3.01%2C5.13-5.75%2C8.12-8.17%2C3.01-2.43%2C6.28-4.53%2C9.75-6.24%2C3.52-1.74%2C7.24-3.09%2C11.06-4%2C4.52-1.08%2C9.06-1.36%2C13.69-1.52%2C2.18-.07%2C4.34-.09%2C6.52-.09h18.88L238.52.29h-.23Z%22/%3E%3Cpolygon%20points%3D%22199.61%20159.31%2079.51%20159.31%20159.17%2079.64%20278.32%2079.64%20199.61%20159.31%22/%3E%3C/g%3E%3C/svg%3E">
+<meta name="theme-color" content="#33277D">
 <style>
   :root{
-    --bg:#f4f5f7; --card:#fff; --ink:#15181d; --muted:#6b7280; --line:#e4e6ea;
-    --brand:#0b5cff; --brand-ink:#fff;
-    --new:#d97706; --new-bg:#fef3c7;
-    --assigned:#2563eb; --assigned-bg:#dbeafe;
-    --in_progress:#7c3aed; --in_progress-bg:#ede9fe;
-    --closed:#059669; --closed-bg:#d1fae5;
-    --cancelled:#6b7280; --cancelled-bg:#f3f4f6;
+    /* FleetOo brand tokens (Claude-FleetOo-Docs/TOKENS.md) */
+    --brand:#4E27A6; --brand-ink:#fff; --indigo:#33277D; --indigo-glow:#4B3190;
+    --accent:#D4F542; --lavender:#F2EEFB; --tint:#F8F6FC;
+    --bg:var(--tint); --card:#fff; --ink:#1F1F1F; --muted:#4A4A4A; --line:#CFCFE5; --line-soft:#E6E2F2;
+    --green:#1F6B4F; --red:#8C2F26;
+    --new:#1F1F1F; --new-bg:var(--accent);
+    --assigned:var(--brand); --assigned-bg:var(--lavender);
+    --in_progress:#fff; --in_progress-bg:var(--brand);
+    --closed:var(--green); --closed-bg:#E4F0EA;
+    --cancelled:var(--muted); --cancelled-bg:#ECEBF1;
     --radius:14px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "IBM Plex Sans Arabic",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Changa",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
   button,input,select,textarea{font:inherit;color:inherit}
   a{color:var(--brand)}
-  header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line)}
+  header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,var(--indigo) 0%,var(--indigo) 60%,var(--indigo-glow) 100%);color:#fff;box-shadow:0 2px 10px rgba(51,39,125,.18)}
+  header .btn{background:transparent;border-color:rgba(255,255,255,.35);color:#fff}
+  header .btn:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+  .brandmark{display:flex;align-items:center;gap:12px;min-width:0}
+  .logo-svg{height:30px;width:auto;display:block}
+  .logo-svg .lm{fill:var(--accent)} .logo-svg .lw{fill:#fff}
+  .apptitle{font-weight:600;font-size:15px;padding-inline-start:12px;border-inline-start:1px solid rgba(255,255,255,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (max-width:520px){.logo-svg{height:24px}.apptitle{font-size:13px}}
   .bar{max-width:980px;margin:0 auto;padding:10px 14px;display:flex;align-items:center;gap:10px}
-  .logo{font-weight:700;font-size:17px;letter-spacing:-.2px}
-  .logo span{color:var(--brand)}
   .grow{flex:1}
   .tabs{max-width:980px;margin:0 auto;padding:0 14px;display:flex;gap:4px}
-  .tab{border:0;background:none;padding:10px 12px;border-bottom:2px solid transparent;color:var(--muted);font-weight:600;cursor:pointer}
-  .tab.on{color:var(--ink);border-color:var(--brand)}
+  .tab{border:0;background:none;padding:10px 12px;border-bottom:3px solid transparent;color:rgba(255,255,255,.7);font-weight:600;cursor:pointer}
+  .tab:hover{color:#fff}
+  .tab.on{color:#fff;border-color:var(--accent)}
   main{max-width:980px;margin:0 auto;padding:14px 14px 80px}
   .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);white-space:nowrap}
   .btn:hover{border-color:#c9ccd2}
   .btn.primary{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
-  .btn.green{background:#16a34a;border-color:#16a34a;color:#fff}
+  .btn.primary:hover{background:var(--indigo)}
+  .btn.green{background:var(--green);border-color:var(--green);color:#fff}
   .btn.sm{padding:5px 9px;font-size:13px;border-radius:8px}
   .btn:disabled{opacity:.5;cursor:default}
   .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px}
   .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap;font-weight:500}
   .chip b{margin-inline-start:6px;font-weight:700}
-  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
   .search{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;margin-bottom:12px}
   .list{display:grid;gap:10px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+  .card{background:var(--card);border:1px solid var(--line-soft);box-shadow:0 1px 2px rgba(51,39,125,.05);border-radius:var(--radius);padding:14px}
   .card.closed,.card.cancelled{opacity:.75}
   .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted)}
+  .id{font-size:12px;font-weight:600;color:var(--brand);background:var(--lavender);border-radius:6px;padding:1px 6px}
   .client{font-weight:700;font-size:16px}
   .badge{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px}
   .age{font-size:12px;color:var(--muted)}
@@ -56,17 +68,17 @@
   .actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
   select.tech{border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:#fff;max-width:200px}
   details{margin-top:8px;font-size:13px;color:var(--muted)}
-  details pre{white-space:pre-wrap;background:#f8f9fb;border-radius:8px;padding:8px;margin:6px 0 0;font:13px/1.5 inherit;color:var(--ink)}
+  details pre{white-space:pre-wrap;background:var(--lavender);border-radius:8px;padding:8px;margin:6px 0 0;font:13px/1.5 inherit;color:var(--ink)}
   .empty{text-align:center;color:var(--muted);padding:40px 10px}
-  .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .panel{background:#fff;border:1px solid var(--line-soft);border-radius:var(--radius);padding:16px}
   label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:12px 0 4px}
   input[type=text],input[type=tel],textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff}
   textarea{resize:vertical}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
   @media (max-width:640px){.grid2{grid-template-columns:1fr}}
-  .warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;padding:8px 10px;font-size:13px;margin-top:10px}
+  .warn{background:var(--lavender);border-inline-start:3px solid var(--brand);color:var(--ink);border-radius:8px;padding:8px 10px;font-size:13px;margin-top:10px}
   .hint{font-size:13px;color:var(--muted)}
-  .toast{position:fixed;inset-inline:0;bottom:18px;margin:auto;width:max-content;max-width:90vw;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;z-index:50;opacity:0;transform:translateY(10px);transition:.2s}
+  .toast{position:fixed;inset-inline:0;bottom:18px;margin:auto;width:max-content;max-width:90vw;background:var(--indigo);color:#fff;padding:10px 16px;border-radius:10px;z-index:50;opacity:0;transform:translateY(10px);transition:.2s}
   .toast.show{opacity:1;transform:none}
   .modal{position:fixed;inset:0;background:rgba(15,18,24,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 12px;z-index:40;overflow:auto}
   .modal.show{display:flex}
@@ -76,32 +88,36 @@
   .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
   .seg button{border:0;background:none;padding:8px 14px;cursor:pointer;font-weight:600;color:var(--muted)}
   .seg button+button{border-inline-start:1px solid var(--line)}
-  .seg button.on{background:var(--ink);color:#fff}
+  .seg button.on{background:var(--brand);color:#fff}
   .seg button b{margin-inline-start:4px}
   #typeFilter button{white-space:nowrap}
   .mix{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .mix>div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:600}
   .mix input{border:0;padding:0;font-size:20px;font-weight:700;width:100%;background:none;outline:none;color:var(--ink)}
-  .mix .tot{background:#f8f9fb}
+  .mix .tot{background:var(--lavender)}
+  .mix .tot b{color:var(--brand)}
   .mix .tot b{font-size:20px;color:var(--ink)}
   @media (max-width:640px){.mix{grid-template-columns:1fr 1fr}}
   .typebar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
   .tbadge{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:#fff}
-  .tbadge.maintenance{background:#fff1f2;border-color:#fecdd3;color:#be123c}
-  .tbadge.installation{background:#f0f9ff;border-color:#bae6fd;color:#0369a1}
+  .tbadge.maintenance{background:#F8ECEA;border-color:#EBCFCB;color:var(--red)}
+  .tbadge.installation{background:var(--lavender);border-color:var(--line);color:var(--brand)}
   .pills{display:flex;gap:6px;flex-wrap:wrap}
-  .pill{font-size:13px;background:#f3f4f6;border-radius:8px;padding:2px 8px}
-  .pill b{margin-inline-end:4px}
-  .demo{background:#fef9c3;color:#713f12;font-size:13px;text-align:center;padding:6px}
-  .dot{width:8px;height:8px;border-radius:50%;background:#16a34a;display:inline-block}
-  .dot.off{background:#dc2626}
+  .pill{font-size:13px;background:var(--lavender);border-radius:8px;padding:2px 8px}
+  .pill b{margin-inline-end:4px;color:var(--brand)}
+  input:focus,textarea:focus,select:focus,.search:focus{outline:2px solid var(--brand);outline-offset:-1px;border-color:var(--brand)}
+  .mix input:focus{outline:none}
+  .mix>div:focus-within{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+  .demo{background:var(--accent);color:var(--ink);font-weight:500;font-size:13px;text-align:center;padding:6px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;box-shadow:0 0 0 3px rgba(212,245,66,.2)}
+  .dot.off{background:#ff6b5b;box-shadow:0 0 0 3px rgba(255,107,91,.25)}
 </style>
 </head>
 <body>
 <div id="demoBar" class="demo" hidden></div>
 <header>
   <div class="bar">
-    <div class="logo">Fleet<span>Oo</span> · <span data-t="title" style="color:inherit;font-weight:600">Installation Tickets</span></div>
+    <div class="brandmark"><svg class="logo-svg" viewBox="0 0 781.81 238.82" role="img" aria-label="Fleetoo"><g class="lm"><path d="M238.29.29h-73.67c-18.29,0-37.23-1.36-55.33,1.83-4.11.72-8.18,1.64-12.2,2.75-3.97,1.1-7.89,2.39-11.75,3.86-3.82,1.46-7.57,3.09-11.24,4.9-3.65,1.8-7.21,3.76-10.67,5.88-3.45,2.11-6.81,4.39-10.05,6.81-3.24,2.42-6.36,4.98-9.37,7.68-3,2.7-5.88,5.53-8.63,8.49-2.75,2.96-5.36,6.04-7.83,9.24-2.47,3.2-4.8,6.52-6.97,9.93-2.18,3.43-4.2,6.96-6.06,10.57-1.87,3.64-3.56,7.36-5.09,11.15-1.53,3.82-2.89,7.72-4.05,11.67-1.18,3.99-2.17,8.04-2.97,12.13-.81,4.15-1.41,8.33-1.82,12.54-.41,4.26-.61,8.54-.61,12.82v106.28l79.51-79.51v-20.67c0-4.07.17-8.13.51-12.18.23-2,.57-3.98,1.03-5.94.89-3.83,2.21-7.56,3.93-11.09,1.69-3.48,3.77-6.76,6.19-9.79,2.4-3.01,5.13-5.75,8.12-8.17,3.01-2.43,6.28-4.53,9.75-6.24,3.52-1.74,7.24-3.09,11.06-4,4.52-1.08,9.06-1.36,13.69-1.52,2.18-.07,4.34-.09,6.52-.09h18.88L238.52.29h-.23Z"/><polygon points="199.61 159.31 79.51 159.31 159.17 79.64 278.32 79.64 199.61 159.31"/></g><g class="lw"><path d="M318.88,145.38c0-2.91,1.02-5.39,3.06-7.43,2.04-2.04,4.51-3.06,7.39-3.06h42.97l-5.01,10.54h-29.79c-1.09,0-2.03.4-2.82,1.18-.79.79-1.18,1.74-1.18,2.86v9.27h27.95l-5.01,10.58h-22.94v23.36h-14.62v-47.3Z"/><path d="M399.98,178.09c0,1.12.38,2.07,1.14,2.86.79.79,1.74,1.18,2.86,1.18h32.11l-3.58,10.54h-36.69c-2.91,0-5.39-1.02-7.43-3.06-2.04-2.04-3.06-4.52-3.06-7.43v-47.3h14.66v43.22Z"/><path d="M447.67,145.38c0-2.91,1.02-5.39,3.06-7.43s4.51-3.06,7.39-3.06h39.04l-3.58,10.54h-27.29c-1.09,0-2.03.4-2.82,1.18s-1.18,1.74-1.18,2.86v9.27h40.23l-3.58,10.17h-36.65v13.64h40.23l-3.58,10.13h-51.28v-47.3Z"/><path d="M514.03,145.38c0-2.91,1.02-5.39,3.06-7.43,2.04-2.04,4.51-3.06,7.39-3.06h39.04l-3.58,10.54h-27.29c-1.09,0-2.03.4-2.82,1.18-.79.79-1.18,1.74-1.18,2.86v9.27h40.23l-3.58,10.17h-36.65v13.64h40.23l-3.58,10.13h-51.28v-47.3Z"/><path d="M576.3,134.88h55.31v10.54h-20.34v47.26h-13.85v-47.26h-21.12v-10.54Z"/><path d="M686.65,134.88c4.96,0,9.2,1.76,12.74,5.27,3.51,3.51,5.27,7.76,5.27,12.74v21.81c0,4.96-1.76,9.19-5.27,12.7-3.54,3.51-7.79,5.27-12.74,5.27h-29.53c-4.96,0-9.2-1.76-12.74-5.27-3.51-3.51-5.27-7.75-5.27-12.7v-21.81c0-4.98,1.76-9.23,5.27-12.74,3.54-3.51,7.79-5.27,12.74-5.27h29.53ZM690,155.34c0-3.19-.86-5.64-2.57-7.35-1.69-1.72-4.13-2.57-7.31-2.57h-16.46c-3.19,0-5.62.86-7.31,2.57-1.72,1.72-2.57,4.17-2.57,7.35v16.91c0,3.16.86,5.6,2.57,7.31,1.69,1.72,4.13,2.57,7.31,2.57h16.46c3.19,0,5.62-.86,7.31-2.57,1.72-1.72,2.57-4.15,2.57-7.31v-16.91Z"/><path d="M763.79,134.88c4.96,0,9.2,1.76,12.74,5.27,3.51,3.51,5.27,7.76,5.27,12.74v21.81c0,4.96-1.76,9.19-5.27,12.7-3.54,3.51-7.79,5.27-12.74,5.27h-29.53c-4.96,0-9.2-1.76-12.74-5.27-3.51-3.51-5.27-7.75-5.27-12.7v-21.81c0-4.98,1.76-9.23,5.27-12.74,3.54-3.51,7.79-5.27,12.74-5.27h29.53ZM767.14,155.34c0-3.19-.86-5.64-2.57-7.35-1.69-1.72-4.13-2.57-7.31-2.57h-16.46c-3.19,0-5.62.86-7.31,2.57-1.72,1.72-2.57,4.17-2.57,7.35v16.91c0,3.16.86,5.6,2.57,7.31,1.69,1.72,4.13,2.57,7.31,2.57h16.46c3.19,0,5.62-.86,7.31-2.57,1.72-1.72,2.57-4.15,2.57-7.31v-16.91Z"/><path d="M657.44,96.52c-4.22,0-7.65,3.43-7.65,7.65s3.36,7.76,7.65,7.76,7.65-3.48,7.65-7.76-3.43-7.65-7.65-7.65Z"/><path d="M674.99,96.52c-4.28,0-7.76,3.43-7.76,7.65s3.41,7.76,7.76,7.76,7.55-3.48,7.55-7.76-3.32-7.65-7.55-7.65Z"/><path d="M625.25,34.37c4.22,0,7.65-3.48,7.65-7.76s-3.43-7.65-7.65-7.65-7.65,3.43-7.65,7.65,3.36,7.76,7.65,7.76Z"/><path d="M642.8,34.37c4.16,0,7.55-3.48,7.55-7.76s-3.32-7.65-7.55-7.65-7.76,3.43-7.76,7.65,3.41,7.76,7.76,7.76Z"/><path d="M756.77,32.6c4.33,0,7.86-3.48,7.86-7.76s-3.53-7.86-7.86-7.86-7.76,3.53-7.76,7.86,3.48,7.76,7.76,7.76Z"/><path d="M364.48,38.5c-2.29-1.14-4.8-1.71-7.52-1.71h-21.06c-4.67,0-8.72,1.68-12.04,4.98-3.3,3.3-4.98,7.35-4.98,12.04v19.84c0,4.67,1.68,8.7,4.98,12.02,3.33,3.3,7.38,4.98,12.04,4.98h25.54v.56c0,9.71-6.15,14.62-18.26,14.62-7.63,0-16.2-1.91-16.28-1.94l-1.8-.4-.88,11.27,1.4.26c.34.06,8.45,1.59,16.52,1.59,29.54,0,31.84-19.84,31.84-25.92v-36.88c0-4.69-1.68-8.74-4.98-12.04-1.39-1.38-2.9-2.46-4.53-3.26ZM359.37,79.77h-17.53c-2.7,0-4.79-.73-6.2-2.15-1.43-1.43-2.15-3.51-2.15-6.2v-15.38c0-2.7.73-4.8,2.16-6.24,1.4-1.43,3.49-2.15,6.19-2.15h9.18c1.29,0,2.44.16,3.44.49,1.1.36,2.01.91,2.75,1.66,1.44,1.44,2.16,3.54,2.16,6.24v23.74Z"/><path d="M776.82,41.76c-1.38-1.38-2.9-2.47-4.52-3.27-2.28-1.13-4.8-1.7-7.52-1.7h-17.93c-4.66,0-8.72,1.67-12.04,4.98-3.31,3.3-4.98,7.36-4.98,12.04v19.43c0,2.22.39,4.29,1.14,6.21h-13.95V17.89l-12.78,5.8v55.76h-21.39v-37.09l-12.77,5.8v31.29h-26.92v-37.09l-12.77,5.8v31.29h-195.44v-25.77c0-4.7-1.68-8.76-4.99-12.07-1.39-1.38-2.91-2.47-4.54-3.27-2.29-1.14-4.81-1.72-7.53-1.72h-21.11c-4.68,0-8.74,1.68-12.07,4.99-3.31,3.31-4.99,7.37-4.99,12.07v19.88c0,4.67,1.68,8.72,4.99,12.04,3.33,3.31,7.39,4.99,12.07,4.99h25.59v.56c0,9.73-6.17,14.65-18.3,14.65-7.65,0-16.23-1.92-16.32-1.94l-1.81-.4-.88,11.29,1.4.26c.34.06,8.47,1.59,16.56,1.59,29.6,0,31.91-19.88,31.91-25.97v-.39h346.88v-36.45c0-4.69-1.68-8.75-4.99-12.04ZM420.29,79.7h-17.57c-2.71,0-4.8-.73-6.22-2.16-1.43-1.43-2.16-3.52-2.16-6.22v-15.42c0-2.71.73-4.81,2.17-6.25,1.4-1.43,3.5-2.16,6.2-2.16h9.2c1.29,0,2.44.16,3.45.49,1.1.36,2.02.91,2.76,1.67,1.44,1.44,2.17,3.55,2.17,6.25v23.79ZM744.42,56.04c0-2.71.73-4.81,2.17-6.24,1.4-1.43,3.48-2.16,6.19-2.16h6.05c1.29,0,2.44.16,3.45.49,1.1.36,2.01.92,2.74,1.67,1.44,1.43,2.17,3.53,2.17,6.24v23h-14.41c-2.71,0-4.79-.73-6.2-2.16-1.43-1.43-2.16-3.51-2.16-6.2v-14.64Z"/></g></svg><span class="apptitle" data-t="title">Installation Tickets</span></div>
     <div class="grow"></div>
     <span class="dot" id="netDot" title=""></span>
     <button class="btn sm" id="refreshBtn" data-t="refresh">Refresh</button>
